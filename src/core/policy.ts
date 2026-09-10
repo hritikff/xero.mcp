@@ -28,7 +28,7 @@ export const PRINCIPALS: Record<string, { role: Role; entities: readonly Entity[
  * and there is no second list to forget to update.
  */
 export const WRITE_GRANTS: Record<Role, readonly string[]> = {
-  pipeline: ['create_draft_invoice'],
+  pipeline: ['create_draft_invoice', 'attach_invoice_document'],
   finance: [],
   query: [],
   // Deliberately identical grant to 'pipeline' — the difference is entity
@@ -37,5 +37,5 @@ export const WRITE_GRANTS: Record<Role, readonly string[]> = {
   // radius. This is what "least privilege" looks like at our layer: we
   // cannot narrow Xero scopes from here (that's Kevin's connection), but we
   // can narrow which entity and which caller may reach the write at all.
-  'invoice-creator': ['create_draft_invoice'],
+  'invoice-creator': ['create_draft_invoice', 'attach_invoice_document'],
 };

@@ -247,6 +247,48 @@ export const INTENTS: Record<string, Intent> = {
       return finishInvoice(a.entity, a.source_record_id, key, inv, a.attach_online ?? false, true, res.response);
     },
   },
+
+  // Companion to create_draft_invoice for callers that hold the source
+  // document themselves (an MCP client with a PDF in its own context) rather
+  // than going through the intake pipeline's teller.intake table — see
+  // invoices.ts's attachFromIntake for that path. Same write grant, same
+  // entity scoping; this just skips the DB-backed intake lookup.
+  attach_invoice_document: {
+    schema: z
+      .object({
+        entity: Entity,
+        invoice_id: z.string().uuid(),
+        file_name: z.string().min(1).max(200),
+        // Base64-encoded file bytes. Kept well under Netlify's function
+        // request-body ceiling (~6MB) - 8MB of base64 is ~6MB of source file.
+        content_base64: z.string().min(1).max(8_000_000),
+        mime_type: z.string().min(1).max(100).default('application/pdf'),
+        include_online: z.boolean().optional(),
+      })
+      .strict(),
+    annotations: { readOnly: false, destructive: false, idempotent: true, openWorld: true },
+    handler: async (a) => {
+      const file = invoices.safeFileName(a.file_name);
+      const bytes = Buffer.from(a.content_base64, 'base64');
+      const { client, tenantId } = await xero(a.entity, 'write');
+      try {
+        const r = await client.accountingApi.createInvoiceAttachmentByFileName(
+          tenantId, a.invoice_id, file, bytes, a.include_online ?? false,
+        );
+        const at = r.body.attachments?.[0];
+        return { _limits: limits(r.response), file, state: 'ATTACHED', attachmentId: at?.attachmentID, url: at?.url };
+      } catch (e: any) {
+        const detail = xeroError(e);
+        // Xero refuses a re-upload of the same filename on the same invoice -
+        // that means it is already there, same read-before-write logic as
+        // attachFromIntake uses for the intake-pipeline path.
+        if (/already exists|duplicate/i.test(JSON.stringify(detail))) {
+          return { file, state: 'ATTACHED', note: 'already present in Xero' };
+        }
+        throw e;
+      }
+    },
+  },
 };
 
 /** role: query == every readOnly intent. Derived, never maintained. */
