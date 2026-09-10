@@ -53,14 +53,16 @@ export const GRANTS: Record<Role, readonly string[]> = {
   ],
   finance: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact'],
   query: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact'],
-  // Deliberately narrower than 'pipeline' on BOTH axes now: entity scope
-  // (locked to ff-events, not '*') and tool surface — no list_all_accounts,
-  // since bank-account visibility has nothing to do with composing an
-  // invoice. This is what "least privilege" looks like at our layer: we
-  // cannot narrow Xero scopes from here (that's Kevin's connection), but we
-  // can narrow which entity, which tools, and which caller may reach a write.
+  // Narrower than 'pipeline' on entity scope (locked to ff-events, not '*')
+  // — that's the axis that actually matters once Kevin provisions real
+  // credentials. Widened to include list_invoices/list_all_accounts on
+  // 2026-09-10: reader + creator combined into one role for the one person
+  // holding it, by explicit request, against Demo Company only — worth
+  // splitting back into separate roles before any real entity's credentials
+  // land here, since a real ff-events would make read/write separation
+  // matter again.
   'ff-events-invoice-creator': [
-    'list_tax_rates', 'list_accounts', 'resolve_contact',
+    'list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact',
     'create_draft_invoice', 'attach_invoice_document',
   ],
   // "Read everything financial, write nothing." Same tool surface as
