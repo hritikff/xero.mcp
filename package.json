@@ -1,0 +1,14 @@
+{
+  "name": "xero-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "The Teller core (RBAC, audit, claims, Money, Xero adapter) exposed as a standalone MCP server on Netlify Functions.",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "google-auth-library": "^11.0.2",
+    "pg": "^8.23.0",
+    "xero-node": "^19.2.0",
+    "zod": "^4.5.4"
+  }
+}

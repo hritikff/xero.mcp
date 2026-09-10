@@ -1,0 +1,1709 @@
+{
+  "source": "ChartOfAccounts (4).csv",
+  "org": "ff-events",
+  "fetchedFrom": "real FFE Xero export, 2026-09-09",
+  "count": 243,
+  "accounts": [
+    {
+      "code": "100000",
+      "name": "Stripe Fees",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": "Stripe Fees"
+    },
+    {
+      "code": "11000",
+      "name": "Intangible Asset at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "11300",
+      "name": "Intangible Asset Acc Amort",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12000",
+      "name": "Computer Equipment at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12030",
+      "name": "Bicycle at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12050",
+      "name": "Fixtures & Fittings at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12060",
+      "name": "Software at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12070",
+      "name": "Office Equipment at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12090",
+      "name": "Leasehold Improvements at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12100",
+      "name": "Event Fixtures at Cost",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12300",
+      "name": "Computer Equipment Acc Dep'n",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12310",
+      "name": "Bicycle Acc Deprec",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12350",
+      "name": "Fixtures & Fittings Acc Dep'n",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12360",
+      "name": "Software Acc Dep'n",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12370",
+      "name": "Leasehold Improvements Acc Dep'n",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12375",
+      "name": "Right-of-Use Asset – Lease of 180 Strand",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12380",
+      "name": "ROU Asset - Accumulated Depreciation",
+      "type": "Fixed Asset",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "12780",
+      "name": "Office Equipment Acc Dep'n",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "12800",
+      "name": "Event Fixtures Acc Dep'n",
+      "type": "Fixed Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "15601",
+      "name": "FFE LLP Bank Amount to be Transferred",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "15701",
+      "name": "FFE LLP Credit Card Adjustment",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "16000",
+      "name": "Trade Debtors Control",
+      "type": "Accounts Receivable",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "16010",
+      "name": "Trade Debtors Informa",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "16500",
+      "name": "Allowance for Doubtful Debts",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "17000",
+      "name": "Prepayments",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "17100",
+      "name": "Events Prepayment",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "17200",
+      "name": "Accrued Income",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "18000",
+      "name": "Sundry Debtors",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "18200",
+      "name": "Rent Deposits",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "18750",
+      "name": "Stripe Control Account",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": "Stripe Control Account"
+    },
+    {
+      "code": "19110",
+      "name": "FF Intercompany",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "19120",
+      "name": "TN Intercompany",
+      "type": "Current Liability",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "19130",
+      "name": "PTE Intercompany",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "20000",
+      "name": "Trade Creditors Control",
+      "type": "Accounts Payable",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "20010",
+      "name": "Trade Creditors - Informa",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "20070",
+      "name": "Founders Factory Loan",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "20080",
+      "name": "Loan to FOUNDERS FORUM PTE. LTD.",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21500",
+      "name": "PAYE/NI Control",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21501",
+      "name": "GAYE Control",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": "Payroll giving - charity donations made via payroll"
+    },
+    {
+      "code": "21510",
+      "name": "Wages Control",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21520",
+      "name": "Pension Control",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21530",
+      "name": "Advances Control",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21700",
+      "name": "VAT",
+      "type": "VAT",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21707",
+      "name": "VAT Payments",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21750",
+      "name": "Lease Liability – Current",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21755",
+      "name": "Lease Liability – Non-Current",
+      "type": "Non-current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "21800",
+      "name": "Corporation Tax Creditor",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "22000",
+      "name": "Accruals",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "22050",
+      "name": "Rent Accruals",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "22500",
+      "name": "Deferred Income - Sponsorship Income",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "22510",
+      "name": "Deferred Income - VC Sales",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "22515",
+      "name": "Deferred Income - Ticket Sales",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "23000",
+      "name": "Sundry Creditors",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "25000",
+      "name": "Bank Loan",
+      "type": "Non-current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "25500",
+      "name": "Finance Lease Liability",
+      "type": "Non-current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "26000",
+      "name": "Other Creditors",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "29000",
+      "name": "Deferred Tax Provision",
+      "type": "Non-current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "296",
+      "name": "DO NOT USE 4 (1)",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "30400",
+      "name": "Fair value reserve",
+      "type": "Equity",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "30800",
+      "name": "Retained Earnings",
+      "type": "Retained Earnings",
+      "taxCode": "No VAT",
+      "description": "Do not Use"
+    },
+    {
+      "code": "30810",
+      "name": "Founders Forum LLP Current Account",
+      "type": "Equity",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "30820",
+      "name": "SVB Current Account",
+      "type": "Equity",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "40000",
+      "name": "Sponsorship Income - London",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40001",
+      "name": "Sponsorship Income - Longevity Asia",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40002",
+      "name": "Sponsorship Income - Longevity London",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40060",
+      "name": "Sponsorship Income - VC Summit",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40080",
+      "name": "Sponsorship Income - CFO Forum",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40100",
+      "name": "Sponsorship Income - North America",
+      "type": "Revenue",
+      "taxCode": "Zero Rated Income",
+      "description": null
+    },
+    {
+      "code": "40200",
+      "name": "Sponsorship Income - Asia",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40300",
+      "name": "Sponsorship Income - Europe100",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40400",
+      "name": "Sponsorship Income - Europe",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40500",
+      "name": "Sponsorship Income - Family Office",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40501",
+      "name": "Sponsorship Income - Family Office MEASA",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40505",
+      "name": "Sponsorship Income - Family Office Asia",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40600",
+      "name": "Sponsorship Income - Other events",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40601",
+      "name": "Sponsorship Income - Dinners",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40602",
+      "name": "Sponsorship Income - Angels",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40603",
+      "name": "Sponsorship Income - Critical Technology",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40605",
+      "name": "Sponsorship Income - Le Weekend",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40650",
+      "name": "Sponsorship Income - India",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40655",
+      "name": "Sponsorship Income - Enterprise Britain",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40700",
+      "name": "VC Income",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40705",
+      "name": "Sponsorship Income - VC Drinks",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40708",
+      "name": "VC Income - FoundersX",
+      "type": "Revenue",
+      "taxCode": "Zero Rated Income",
+      "description": null
+    },
+    {
+      "code": "40710",
+      "name": "VC Income - Le Weekend",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40715",
+      "name": "VC Income - MEASA",
+      "type": "Revenue",
+      "taxCode": "Zero Rated Income",
+      "description": null
+    },
+    {
+      "code": "40720",
+      "name": "VC Income - Global",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40730",
+      "name": "VC Income - North America",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40740",
+      "name": "VC Income - Europe",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40800",
+      "name": "Sponsorship Income - Insights & Reports",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40805",
+      "name": "Sponsorship Income - CMO Forum",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40808",
+      "name": "Sponsorship Income - CPO Forum",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "40900",
+      "name": "Sponsorship Income - MEASA",
+      "type": "Revenue",
+      "taxCode": "Zero Rated Income",
+      "description": null
+    },
+    {
+      "code": "40950",
+      "name": "Sponsorship Income - FF Davos",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "41000",
+      "name": "Cancellation Fee",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "41010",
+      "name": "Sponsorship Income - GovTech",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "42000",
+      "name": "Event Attendee Donation",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "43000",
+      "name": "ITF Commision",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "43003",
+      "name": "AI Alliance",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "43005",
+      "name": "Sponsorship Income - Human X",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "43010",
+      "name": "Sponsorship Income - Asia Deep Tech",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "44000",
+      "name": "TN-Markup on Salary",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "44500",
+      "name": "Revenue Share - London AI Hub Ltd",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "45000",
+      "name": "Events Ticketing Income (Longevity Asia)",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "45001",
+      "name": "Events Ticketing Income (Longevity London)",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "45100",
+      "name": "Events Ticketing Income (GovTech Summit 2026)",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "477",
+      "name": "Salaries",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": "Payment to employees in exchange for their resources"
+    },
+    {
+      "code": "479",
+      "name": "Employers National Insurance",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": "Payment made for National Insurance contributions - business contribution only"
+    },
+    {
+      "code": "48000",
+      "name": "Contra Barter Revenue",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "482",
+      "name": "Pensions Costs",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": "Payments made to pension schemes"
+    },
+    {
+      "code": "49000",
+      "name": "Other Income Events",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "4920",
+      "name": "Depreciation Expense - Lease 180 Strand",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "49250",
+      "name": "Profit on Disposal of Asset",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": "Revenue derived from the sale of Fixed Assets"
+    },
+    {
+      "code": "49500",
+      "name": "Founders Assistant's / Lavender Jones referral income",
+      "type": "Revenue",
+      "taxCode": "Zero Rated Income",
+      "description": null
+    },
+    {
+      "code": "497",
+      "name": "Foreign Currency Gains and Losses",
+      "type": "Bank Revaluations",
+      "taxCode": "No VAT",
+      "description": "Bank account revaluations due for foreign exchange rate changes"
+    },
+    {
+      "code": "498",
+      "name": "Unrealised Currency (Gains)/Losses",
+      "type": "Unrealised Currency Gains",
+      "taxCode": "No VAT",
+      "description": "Unrealised currency gains on outstanding items"
+    },
+    {
+      "code": "49850",
+      "name": "Recharged Brent & Team",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "49860",
+      "name": "Recharged Expenses/Revenue",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "49870",
+      "name": "Reimbursed Expenses - Computer Expenses",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "49880",
+      "name": "Recharged Tech Nation Salaries / Bonuses",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "49890",
+      "name": "Reimbursed Expenses - Personnel",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "499",
+      "name": "Realised Currency (Gains)/Losses",
+      "type": "Realised Currency Gains",
+      "taxCode": "No VAT",
+      "description": "Gains or losses made due to currency exchange rate changes"
+    },
+    {
+      "code": "49900",
+      "name": "Reimbursed Expenses - General",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "49902",
+      "name": "Reimbursed Expense - Other",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "49999",
+      "name": "Sales Discount",
+      "type": "Revenue",
+      "taxCode": "20% (VAT on Income)",
+      "description": null
+    },
+    {
+      "code": "50000",
+      "name": "Event Costs - London",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50100",
+      "name": "Event Costs - North America",
+      "type": "Direct Costs",
+      "taxCode": "Zero Rated Expenses",
+      "description": null
+    },
+    {
+      "code": "50101",
+      "name": "Event costs - GovTech",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50200",
+      "name": "Event Costs - Asia",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50300",
+      "name": "Event Costs - Europe100",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50350",
+      "name": "Event Costs - FF Davos",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50400",
+      "name": "Event Costs - Europe",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50500",
+      "name": "Event Costs - Family Office",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50505",
+      "name": "Event Costs - Family Office Asia",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50510",
+      "name": "Event Costs - Le Weekend",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50515",
+      "name": "Event Costs - Family Office MEASA",
+      "type": "Direct Costs",
+      "taxCode": "Zero Rated Expenses",
+      "description": null
+    },
+    {
+      "code": "50600",
+      "name": "Event Costs - Other events",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50601",
+      "name": "Event costs - Asia Deep Tech",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50602",
+      "name": "Event Costs - Human X",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50603",
+      "name": "AI Alliance/costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50604",
+      "name": "ITF/costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50640",
+      "name": "Event costs - Longevity London",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50650",
+      "name": "Event costs - Longevity Asia",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50675",
+      "name": "Events Costs - Critical Technology",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50680",
+      "name": "Event Costs - India",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50700",
+      "name": "Event Costs - Insight & Reports",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50800",
+      "name": "Event Costs - MEASA",
+      "type": "Direct Costs",
+      "taxCode": "Zero Rated Expenses",
+      "description": null
+    },
+    {
+      "code": "50810",
+      "name": "Event costs - VC Summit",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50815",
+      "name": "Event costs - CFO Forum",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50820",
+      "name": "Event costs - CPO Forum",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50830",
+      "name": "Event costs - CMO Forum",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50840",
+      "name": "Event costs - VC Drinks",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50850",
+      "name": "Event Costs - Dinners",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "50900",
+      "name": "Event Costs - Angels",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "51000",
+      "name": "Consulting Costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "52000",
+      "name": "Advisory Costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "52500",
+      "name": "Due Diligence Costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "54000",
+      "name": "Special Projects Costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "55000",
+      "name": "MCoC Fees",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": "Male Champions of Change fees"
+    },
+    {
+      "code": "56000",
+      "name": "Digital Production",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "56001",
+      "name": "Insights & Reports",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "57000",
+      "name": "Contra Barter Costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "59000",
+      "name": "Expenses Reimbursed/Cost",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "59500",
+      "name": "Commission On Rental Income",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "59600",
+      "name": "Other",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "60002",
+      "name": "National insurance on  bonus",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "61000",
+      "name": "Basic Pay",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "61050",
+      "name": "National Insurance Employer",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "61080",
+      "name": "Employers Pension",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "61100",
+      "name": "Staff Health & Wellbeing",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "61150",
+      "name": "Pension Costs",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "62000",
+      "name": "Bonus Payments",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "62001",
+      "name": "Carolyn Bonus",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "62002",
+      "name": "Commissions",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "63000",
+      "name": "Staff Training",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "63200",
+      "name": "Staff Welfare",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "63300",
+      "name": "Food Consumables",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "63500",
+      "name": "Recruitment costs",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "64000",
+      "name": "Freelance Costs",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": "Freelance consulting"
+    },
+    {
+      "code": "66100",
+      "name": "Travel",
+      "type": "Overhead",
+      "taxCode": "Zero Rated Expenses",
+      "description": null
+    },
+    {
+      "code": "66105",
+      "name": "Parking",
+      "type": "Overhead",
+      "taxCode": "Zero Rated Expenses",
+      "description": null
+    },
+    {
+      "code": "66200",
+      "name": "Events Travel",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "66201",
+      "name": "non FF specific event travel",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "66300",
+      "name": "Accommodation",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "66500",
+      "name": "Subsistence",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "67000",
+      "name": "Founders Assistant's Costs",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "6900",
+      "name": "Longevity Show Ltd/Cost",
+      "type": "Current Asset",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "6901",
+      "name": "Longevity Show Ltd/Revenue",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "71000",
+      "name": "Rent",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "7101",
+      "name": "Rent to FF LLP",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "71050",
+      "name": "Storage",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "71100",
+      "name": "move in / fit out - one off costs",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "71300",
+      "name": "Cleaning",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "71340",
+      "name": "Office Consumables",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "71400",
+      "name": "Office Insurance",
+      "type": "Overhead",
+      "taxCode": "Exempt Expenses",
+      "description": null
+    },
+    {
+      "code": "71420",
+      "name": "Event Insurance",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "71500",
+      "name": "Repairs and Maintenance",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "72000",
+      "name": "Technical Support",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "72250",
+      "name": "Database Costs",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "72400",
+      "name": "Computer Consumables",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "74000",
+      "name": "Postage, Printing & Stationery",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "74602",
+      "name": "Subscriptions and SaaS tools",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "74605",
+      "name": "Lumix fee",
+      "type": "Direct Costs",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "75000",
+      "name": "Telephone",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "75030",
+      "name": "Internet",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "801",
+      "name": "DO NOT USE 2",
+      "type": "Unpaid Expense Claims",
+      "taxCode": "No VAT",
+      "description": "Expense claims typically made by employees/shareholder employees which the business has not made payment on"
+    },
+    {
+      "code": "803",
+      "name": "Wages Payable",
+      "type": "Wages Payable",
+      "taxCode": "No VAT",
+      "description": "Xero automatically updates this account for payroll entries created using Payroll and will store the payroll amount to be paid to the employee for the pay run. This account enables you to maintain separate accounts for employee Wages Payable amounts and Accounts Payable amounts"
+    },
+    {
+      "code": "814",
+      "name": "Wages Payable - Payroll",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": "Where this account is set as the nominated Wages Payable account within Payroll Settings, Xero allocates the net wage amount of each pay run created using Payroll to this account"
+    },
+    {
+      "code": "82000",
+      "name": "Marketing",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "82100",
+      "name": "Website Costs",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "825",
+      "name": "PAYE Payable",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": "The Amount of PAYE tax due to be paid to the HMRC"
+    },
+    {
+      "code": "83000",
+      "name": "Gifts - Allowable",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "83050",
+      "name": "Gifts - Disallowable",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "83500",
+      "name": "Sponsorship Costs",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "840",
+      "name": "DO NOT USE 1",
+      "type": "Historical",
+      "taxCode": "No VAT",
+      "description": "For any accounting and starting balance adjustments"
+    },
+    {
+      "code": "84000",
+      "name": "Entertainment - Client",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "85000",
+      "name": "Charity Donations",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "858",
+      "name": "Pensions Payable",
+      "type": "Current Liability",
+      "taxCode": "No VAT",
+      "description": "Payroll pension payable account"
+    },
+    {
+      "code": "860",
+      "name": "Rounding",
+      "type": "Rounding",
+      "taxCode": "No VAT",
+      "description": "An adjustment entry to allow for rounding"
+    },
+    {
+      "code": "877",
+      "name": "Tracking Transfers",
+      "type": "Tracking",
+      "taxCode": "No VAT",
+      "description": "Transfers between tracking categories"
+    },
+    {
+      "code": "91000",
+      "name": "Audit",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "91005",
+      "name": "Accounting Services",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "91200",
+      "name": "Legal Fees",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "91510",
+      "name": "Brent & Team costs (salaries, travel, other)",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "91600",
+      "name": "Consultancy Fees",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "91700",
+      "name": "Professional Fees",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "93000",
+      "name": "Bank Charges",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "93050",
+      "name": "Worldpay fees",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "94000",
+      "name": "Bad Debts Written Off",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "94500",
+      "name": "Bad Debt Provision Expense",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "95000",
+      "name": "Miscellaneous",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": null
+    },
+    {
+      "code": "95020",
+      "name": "HMRC late fees",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "95500",
+      "name": "Exchange Rate Variance",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "96000",
+      "name": "Depreciation",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "96800",
+      "name": "Amortisation",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "98000",
+      "name": "Interest Received",
+      "type": "Other Income",
+      "taxCode": "Exempt Income",
+      "description": null
+    },
+    {
+      "code": "98100",
+      "name": "Dividend Received",
+      "type": "Other Income",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "99500",
+      "name": "Taxation",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "99580",
+      "name": "Deferred Taxation",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "99998",
+      "name": "Suspense",
+      "type": "Overhead",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "PLEO",
+      "name": "Pleo default account",
+      "type": "Overhead",
+      "taxCode": "20% (VAT on Expenses)",
+      "description": "Pleo account used for expenses without an associated account number."
+    },
+    {
+      "code": "PLEOBANK",
+      "name": "Pleo account",
+      "type": "Bank",
+      "taxCode": "No VAT",
+      "description": null
+    },
+    {
+      "code": "PLEOPOCKET",
+      "name": "Pleo Pocket account",
+      "type": "Bank",
+      "taxCode": "No VAT",
+      "description": null
+    }
+  ]
+}
