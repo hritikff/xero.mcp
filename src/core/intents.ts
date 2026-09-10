@@ -92,6 +92,26 @@ export const INTENTS: Record<string, Intent> = {
     },
   },
 
+  // Full chart of accounts, unfiltered - list_accounts stays REVENUE-only on
+  // purpose (that is what invoice line items are picked from). This is the
+  // general-purpose read: bank, expense, asset, liability accounts too, for
+  // anyone asking a broader bookkeeping question rather than composing an
+  // invoice.
+  list_all_accounts: {
+    schema: z.object({ entity: Entity }).strict(),
+    annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
+    handler: async ({ entity }) => {
+      const { client, tenantId } = await xero(entity, 'read');
+      const r = await client.accountingApi.getAccounts(tenantId);
+      return {
+        _limits: limits(r.response),
+        accounts: (r.body.accounts ?? []).map((a) => ({
+          code: a.code, name: a.name, type: a.type, status: a.status, class: a.class,
+        })),
+      };
+    },
+  },
+
   resolve_contact: {
     schema: z.object({ entity: Entity, name: z.string().min(2).max(200) }).strict(),
     annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
