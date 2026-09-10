@@ -20,7 +20,13 @@ import { randomUUID } from 'node:crypto';
 function principalFor(req: Request): string | null {
   const secret = process.env.TELLER_SHARED_SECRET;
   if (!secret) return null; // fail closed: unset means nobody gets in, not everybody
-  if (req.headers.get('x-teller-secret') !== secret) return null;
+  // Claude's custom-connector UI only allows a fixed set of standard header
+  // names - x-teller-secret isn't on that list, so Authorization: Bearer is
+  // the actual credential path from there. x-teller-secret stays supported
+  // for the smoke-test script and any other caller that isn't UI-restricted.
+  const bearer = req.headers.get('authorization');
+  const bearerToken = bearer?.startsWith('Bearer ') ? bearer.slice(7) : null;
+  if (req.headers.get('x-teller-secret') !== secret && bearerToken !== secret) return null;
   // One shared secret = one principal for the whole deployment, by design -
   // there is no per-caller identity without a real auth system. Whoever holds
   // the secret IS this principal. Keep the role this maps to as narrow as
