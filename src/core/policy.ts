@@ -62,7 +62,7 @@ export const GRANTS: Record<Role, readonly string[]> = {
   // land here, since a real ff-events would make read/write separation
   // matter again.
   'ff-events-invoice-creator': [
-    'list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact',
+    'list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'get_balance_sheet', 'resolve_contact',
     'create_draft_invoice', 'attach_invoice_document',
   ],
   // "Read everything financial, write nothing." Same tool surface as
