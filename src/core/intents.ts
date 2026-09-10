@@ -112,6 +112,39 @@ export const INTENTS: Record<string, Intent> = {
     },
   },
 
+  // Read access to invoices themselves - status, amounts, who they're for -
+  // separate from resolve_contact (who a client IS) and list_accounts (the
+  // chart, not what's been billed against it). Uses the SDK's typed
+  // `statuses` array and `searchTerm` param, same as resolve_contact - never
+  // a raw `where` string, so no user-controlled text reaches Xero's filter
+  // parser. summaryOnly trims the response to what a reader actually needs.
+  list_invoices: {
+    schema: z
+      .object({
+        entity: Entity,
+        statuses: z.array(z.enum(['DRAFT', 'SUBMITTED', 'AUTHORISED', 'PAID', 'VOIDED', 'DELETED'])).optional(),
+        search: z.string().min(2).max(200).optional(),
+        page: z.number().int().positive().optional(),
+      })
+      .strict(),
+    annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
+    handler: async ({ entity, statuses, search, page }) => {
+      const { client, tenantId } = await xero(entity, 'read');
+      const r = await client.accountingApi.getInvoices(
+        tenantId, undefined, undefined, undefined, undefined, undefined, undefined,
+        statuses, page, undefined, undefined, undefined, true, undefined, search,
+      );
+      return {
+        _limits: limits(r.response),
+        invoices: (r.body.invoices ?? []).map((i) => ({
+          invoiceID: i.invoiceID, invoiceNumber: i.invoiceNumber, reference: i.reference,
+          contact: i.contact?.name, status: i.status,
+          total: i.total, amountDue: i.amountDue, date: i.date, dueDate: i.dueDate,
+        })),
+      };
+    },
+  },
+
   resolve_contact: {
     schema: z.object({ entity: Entity, name: z.string().min(2).max(200) }).strict(),
     annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },

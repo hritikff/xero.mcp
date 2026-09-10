@@ -17,7 +17,7 @@ export type Entity = (typeof ENTITIES)[number];
 // it actually meant. validatePolicy() below enforces the naming contract at
 // boot — a role named "X-invoice-creator" whose principal isn't scoped to
 // exactly [X] fails the start, not a 3am surprise.
-export type Role = 'pipeline' | 'finance' | 'query' | 'ff-events-invoice-creator';
+export type Role = 'pipeline' | 'finance' | 'query' | 'ff-events-invoice-creator' | 'invoice-reader' | 'viewer';
 
 /**
  * Principals are Cloud Run service-account emails, or a Slack user id that the
@@ -48,11 +48,11 @@ export const PRINCIPALS: Record<string, { role: Role; entities: readonly Entity[
  */
 export const GRANTS: Record<Role, readonly string[]> = {
   pipeline: [
-    'list_tax_rates', 'list_accounts', 'list_all_accounts', 'resolve_contact',
+    'list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact',
     'create_draft_invoice', 'attach_invoice_document',
   ],
-  finance: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'resolve_contact'],
-  query: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'resolve_contact'],
+  finance: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact'],
+  query: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact'],
   // Deliberately narrower than 'pipeline' on BOTH axes now: entity scope
   // (locked to ff-events, not '*') and tool surface — no list_all_accounts,
   // since bank-account visibility has nothing to do with composing an
@@ -63,4 +63,20 @@ export const GRANTS: Record<Role, readonly string[]> = {
     'list_tax_rates', 'list_accounts', 'resolve_contact',
     'create_draft_invoice', 'attach_invoice_document',
   ],
+  // "Read everything financial, write nothing." Same tool surface as
+  // finance/query but its own role rather than reusing them — those two
+  // exist for the pipeline job and the Slack query bot respectively, with
+  // their own PRINCIPALS already attached; a human asking "let me look
+  // things up" is a different grant to reason about even when the intent
+  // list happens to match today. If one of them ever needs to diverge from
+  // the other, sharing a role would silently couple them.
+  'invoice-reader': ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'resolve_contact'],
+  // The narrowest read role that exists: whatever's needed to view an
+  // invoice's shape (which accounts and tax rates it could use) without
+  // seeing the org's bank balances or its actual billing history. Start
+  // here for "give them just enough to see something specific" and widen
+  // deliberately — narrowing GRANTS.viewer later would silently take tools
+  // away from everyone holding it, so widen per-person with a new role
+  // instead of stretching this one.
+  viewer: ['list_tax_rates', 'list_accounts'],
 };
