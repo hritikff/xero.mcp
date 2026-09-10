@@ -46,7 +46,16 @@ function legacySecretMap(): Record<string, string> {
  * identity path; legacySecretMap() above is only a fallback for whatever
  * was wired before this table existed.
  */
-async function principalFor(req: Request): Promise<string | null> {
+/**
+ * Resolves a caller to a principal, and separately reports whether a
+ * credential was even presented - a bare unauthenticated ping (no header at
+ * all, e.g. a health-check bot) is not worth an audit row, but a PRESENTED
+ * and WRONG token is exactly what brute-forcing looks like, and previously
+ * left no trace anywhere: no tools got registered for a null principal, so
+ * nothing downstream ever logged the attempt. See the caller below for the
+ * audit write this makes possible.
+ */
+async function principalFor(req: Request): Promise<{ principal: string | null; attempted: boolean; hashPrefix?: string }> {
   const bearer = req.headers.get('authorization');
   const bearerToken = bearer?.startsWith('Bearer ') ? bearer.slice(7) : null;
   // Claude's custom-connector UI only allows a fixed set of standard header
@@ -55,20 +64,28 @@ async function principalFor(req: Request): Promise<string | null> {
   // x-teller-secret stays supported for the smoke-test script and any other
   // caller that isn't UI-restricted.
   const token = req.headers.get('x-teller-secret') ?? bearerToken;
-  if (!token) return null;
+  if (!token) return { principal: null, attempted: false };
 
   const hash = createHash('sha256').update(token).digest('hex');
+  const hashPrefix = hash.slice(0, 12); // enough to correlate repeat attempts in logs, not enough to help guess the token
+
+  // Both ceilings enforced in the query, not in JS: revoked_at is a
+  // deliberate act, expires_at is a built-in one. A row failing either is
+  // simply not returned, so there is no "expired but still resolved" path.
   const [row] = await q<{ principal: string }>(
-    `SELECT principal FROM teller.mcp_token WHERE token_hash = $1 AND revoked_at IS NULL`, [hash],
+    `SELECT principal FROM teller.mcp_token
+      WHERE token_hash = $1 AND revoked_at IS NULL AND (expires_at IS NULL OR expires_at > now())`,
+    [hash],
   );
   if (row) {
     // Best-effort - a slow or failed timestamp bump must never block the
     // actual request.
     q(`UPDATE teller.mcp_token SET last_used_at = now() WHERE token_hash = $1`, [hash]).catch(() => {});
-    return row.principal;
+    return { principal: row.principal, attempted: true, hashPrefix };
   }
 
-  return legacySecretMap()[token] ?? null;
+  const legacy = legacySecretMap()[token] ?? null;
+  return { principal: legacy, attempted: true, hashPrefix };
 }
 
 function buildServer(principal: string | null): McpServer {
@@ -138,7 +155,23 @@ export default async (req: Request): Promise<Response> => {
   // Stateless, same as the Node door: one server + transport per request, no
   // session held across invocations - matches a serverless function's own
   // lifecycle rather than fighting it.
-  const principal = await principalFor(req);
+  const { principal, attempted, hashPrefix } = await principalFor(req);
+
+  if (attempted && !principal) {
+    // A credential was presented and didn't resolve - a wrong guess, a
+    // revoked token still in use, or someone probing. This is the one case
+    // that used to be invisible entirely. principal is a required column on
+    // audit_event, so 'unknown:<hash prefix>' both satisfies that and gives
+    // enough to grep for repeat attempts without logging anything that helps
+    // guess a real token.
+    audit.write({
+      requestId: randomUUID(), ts: new Date().toISOString(),
+      principal: `unknown:${hashPrefix}`, intent: 'mcp_authenticate',
+      eventType: 'DECISION', decision: 'DENY', reason: 'presented token did not resolve to a principal',
+      argsSha256: audit.hash(null),
+    }).catch(() => {}); // never let audit-of-a-rejection block the rejection itself
+  }
+
   const server = buildServer(principal);
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   await server.connect(transport);
