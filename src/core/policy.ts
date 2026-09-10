@@ -23,19 +23,30 @@ export const PRINCIPALS: Record<string, { role: Role; entities: readonly Entity[
 };
 
 /**
- * Writes need an explicit grant. Reads are NOT listed here — they derive from
- * each intent's readOnly annotation, so adding a read intent grants nothing new
- * and there is no second list to forget to update.
+ * Every intent — read AND write — needs an explicit grant here. This used to
+ * be write-only, with every read-only intent free to any authenticated
+ * principal by virtue of its annotation; that meant "give this person only
+ * list_tax_rates" was impossible; every reader saw every read tool. Now
+ * nothing is implicit: a role sees exactly the intents named here, and
+ * validatePolicy() below fails the boot if a new intent is added and nobody
+ * grants it — so "forgot to scope the new tool" is a startup error, not a
+ * silent over-grant.
  */
-export const WRITE_GRANTS: Record<Role, readonly string[]> = {
-  pipeline: ['create_draft_invoice', 'attach_invoice_document'],
-  finance: [],
-  query: [],
-  // Deliberately identical grant to 'pipeline' — the difference is entity
-  // scope (locked to ff-events, not '*') and principal (a named test
-  // identity, not the automated Cloud Run job). Same intent, narrower blast
-  // radius. This is what "least privilege" looks like at our layer: we
+export const GRANTS: Record<Role, readonly string[]> = {
+  pipeline: [
+    'list_tax_rates', 'list_accounts', 'list_all_accounts', 'resolve_contact',
+    'create_draft_invoice', 'attach_invoice_document',
+  ],
+  finance: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'resolve_contact'],
+  query: ['list_tax_rates', 'list_accounts', 'list_all_accounts', 'resolve_contact'],
+  // Deliberately narrower than 'pipeline' on BOTH axes now: entity scope
+  // (locked to ff-events, not '*') and tool surface — no list_all_accounts,
+  // since bank-account visibility has nothing to do with composing an
+  // invoice. This is what "least privilege" looks like at our layer: we
   // cannot narrow Xero scopes from here (that's Kevin's connection), but we
-  // can narrow which entity and which caller may reach the write at all.
-  'invoice-creator': ['create_draft_invoice', 'attach_invoice_document'],
+  // can narrow which entity, which tools, and which caller may reach a write.
+  'invoice-creator': [
+    'list_tax_rates', 'list_accounts', 'resolve_contact',
+    'create_draft_invoice', 'attach_invoice_document',
+  ],
 };

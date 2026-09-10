@@ -1,4 +1,4 @@
-import { PRINCIPALS, WRITE_GRANTS, type Entity } from './policy.ts';
+import { PRINCIPALS, GRANTS, type Entity } from './policy.ts';
 import { INTENTS } from './intents.ts';
 
 export type Decision =
@@ -17,8 +17,9 @@ export function authorize(principal: string, intentName: string, args: unknown):
   const intent = INTENTS[intentName];
   if (!intent) return { allow: false, reason: 'unknown intent', status: 404 };
 
-  // Reads come from the annotation. Writes need naming in WRITE_GRANTS.
-  const permitted = intent.annotations.readOnly || WRITE_GRANTS[p.role].includes(intentName);
+  // Both reads and writes come from GRANTS now — nothing is implicit. A role
+  // sees exactly the intents named for it, full stop.
+  const permitted = GRANTS[p.role].includes(intentName);
   if (!permitted) return { allow: false, reason: `role ${p.role} may not ${intentName}`, status: 403 };
 
   // Entity scope. Every intent takes an entity, so a missing one is a bug.
@@ -33,32 +34,29 @@ export function authorize(principal: string, intentName: string, args: unknown):
 
 /**
  * Boot check. TypeScript already catches a bad entity or role name, but
- * WRITE_GRANTS holds plain strings — so renaming an intent would silently drop
- * its grant and the pipeline would just stop creating invoices at 07:30.
- * Fail to start instead.
+ * GRANTS holds plain strings — so renaming an intent would silently drop its
+ * grant and a caller would just start getting 403s. Fail to start instead.
  */
 export function validatePolicy(): string[] {
   const errs: string[] = [];
 
-  for (const [role, names] of Object.entries(WRITE_GRANTS)) {
+  for (const [role, names] of Object.entries(GRANTS)) {
     for (const n of names) {
-      const i = INTENTS[n];
-      if (!i) errs.push(`WRITE_GRANTS.${role} names unknown intent "${n}"`);
-      else if (i.annotations.readOnly)
-        errs.push(`WRITE_GRANTS.${role} grants read-only "${n}" — reads derive from annotations, remove it`);
+      if (!INTENTS[n]) errs.push(`GRANTS.${role} names unknown intent "${n}"`);
     }
   }
 
   for (const [p, cfg] of Object.entries(PRINCIPALS)) {
-    if (!WRITE_GRANTS[cfg.role]) errs.push(`principal ${p} has unknown role "${cfg.role}"`);
+    if (!GRANTS[cfg.role]) errs.push(`principal ${p} has unknown role "${cfg.role}"`);
     if (cfg.entities !== '*' && cfg.entities.length === 0)
       errs.push(`principal ${p} is scoped to zero entities — remove it instead`);
   }
 
-  // A write intent nobody can call is dead config, and usually a typo.
-  for (const [name, i] of Object.entries(INTENTS)) {
-    if (!i.annotations.readOnly && !Object.values(WRITE_GRANTS).flat().includes(name))
-      errs.push(`write intent "${name}" is granted to no role`);
+  // An intent nobody can call is dead config, and usually a typo or a
+  // forgotten grant on a newly added tool.
+  for (const name of Object.keys(INTENTS)) {
+    if (!Object.values(GRANTS).flat().includes(name))
+      errs.push(`intent "${name}" is granted to no role`);
   }
 
   return errs;
