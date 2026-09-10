@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "teller": {
+      "type": "http",
+      "url": "https://xero-mcp.netlify.app/mcp",
+      "headers": {
+        "x-teller-secret": "${TELLER_SHARED_SECRET}"
+      }
+    }
+  }
+}
