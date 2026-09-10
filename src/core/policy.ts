@@ -6,7 +6,18 @@
 export const ENTITIES = ['tech-nation', 'ff-events', 'ff-global', 'founders-law'] as const;
 export type Entity = (typeof ENTITIES)[number];
 
-export type Role = 'pipeline' | 'finance' | 'query' | 'invoice-creator';
+// 'pipeline' | 'finance' | 'query' are cross-entity roles (their principals
+// below are scoped with entities: '*') — a single entity in the name would
+// be misleading for those, so they stay entity-agnostic. Anything scoped to
+// ONE entity gets that entity baked into the role name itself, `${entity}
+// -invoice-creator` — so the name alone tells you what it can touch, instead
+// of relying on a separate entities array staying in sync with it. This is
+// the fix for a real mix-up tonight: a caller tried tech-nation against a
+// role named only 'invoice-creator', which said nothing about which entity
+// it actually meant. validatePolicy() below enforces the naming contract at
+// boot — a role named "X-invoice-creator" whose principal isn't scoped to
+// exactly [X] fails the start, not a 3am surprise.
+export type Role = 'pipeline' | 'finance' | 'query' | 'ff-events-invoice-creator';
 
 /**
  * Principals are Cloud Run service-account emails, or a Slack user id that the
@@ -18,8 +29,11 @@ export const PRINCIPALS: Record<string, { role: Role; entities: readonly Entity[
   'U01KEVIN': { role: 'finance', entities: '*' },
   'U02CHARLOTTE': { role: 'query', entities: ['tech-nation'] },
   // Least-privilege test principal, 2026-09-09: one intent, one entity.
-  // Never grant '*' to this role — that is what 'pipeline' is for.
-  'U0INVOICE-CREATOR': { role: 'invoice-creator', entities: ['ff-events'] },
+  // Never grant '*' to this role — that is what 'pipeline' is for. The role
+  // name itself now says ff-events, so a caller can't accidentally ask this
+  // principal to touch tech-nation without the name already having told
+  // them not to.
+  'U0INVOICE-CREATOR': { role: 'ff-events-invoice-creator', entities: ['ff-events'] },
 };
 
 /**
@@ -45,7 +59,7 @@ export const GRANTS: Record<Role, readonly string[]> = {
   // invoice. This is what "least privilege" looks like at our layer: we
   // cannot narrow Xero scopes from here (that's Kevin's connection), but we
   // can narrow which entity, which tools, and which caller may reach a write.
-  'invoice-creator': [
+  'ff-events-invoice-creator': [
     'list_tax_rates', 'list_accounts', 'resolve_contact',
     'create_draft_invoice', 'attach_invoice_document',
   ],

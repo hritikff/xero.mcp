@@ -1,4 +1,4 @@
-import { PRINCIPALS, GRANTS, type Entity } from './policy.ts';
+import { PRINCIPALS, GRANTS, ENTITIES, type Entity } from './policy.ts';
 import { INTENTS } from './intents.ts';
 
 export type Decision =
@@ -50,6 +50,22 @@ export function validatePolicy(): string[] {
     if (!GRANTS[cfg.role]) errs.push(`principal ${p} has unknown role "${cfg.role}"`);
     if (cfg.entities !== '*' && cfg.entities.length === 0)
       errs.push(`principal ${p} is scoped to zero entities — remove it instead`);
+
+    // The naming contract itself: a role called "X-invoice-creator" must mean
+    // exactly what it says. This is what makes the rename load-bearing rather
+    // than cosmetic — a role whose name claims one entity but whose principal
+    // is scoped to something else (or to everything) fails the boot instead
+    // of quietly misleading whoever reads the role name to decide what it
+    // can touch. This is the exact class of mix-up that prompted the rename.
+    const namedEntity = ENTITIES.find((e) => cfg.role === `${e}-invoice-creator`);
+    if (namedEntity) {
+      if (cfg.entities === '*' || cfg.entities.length !== 1 || cfg.entities[0] !== namedEntity) {
+        errs.push(
+          `principal ${p} has role "${cfg.role}" (implies entities: ["${namedEntity}"]) ` +
+          `but is actually scoped to ${cfg.entities === '*' ? "'*'" : JSON.stringify(cfg.entities)}`,
+        );
+      }
+    }
   }
 
   // An intent nobody can call is dead config, and usually a typo or a
