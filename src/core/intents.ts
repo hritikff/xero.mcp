@@ -116,29 +116,40 @@ export const INTENTS: Record<string, Intent> = {
   // separate from resolve_contact (who a client IS) and list_accounts (the
   // chart, not what's been billed against it). Uses the SDK's typed
   // `statuses` array and `searchTerm` param, same as resolve_contact - never
-  // a raw `where` string, so no user-controlled text reaches Xero's filter
-  // parser. summaryOnly trims the response to what a reader actually needs.
+  // a raw `where` string built from caller input. `type` is the one
+  // exception: Xero has no typed param for it, only a `where` clause, but
+  // the value is a closed two-option zod enum we construct ourselves - no
+  // caller-supplied text ever reaches it, same safety property as a typed
+  // param, just without SDK support for one. summaryOnly trims the response
+  // to what a reader actually needs.
+  //
+  // ACCREC = money owed TO the entity (sales invoices - what list_invoices
+  // returned before this existed). ACCPAY = money the entity owes (bills -
+  // "what are we waiting to pay"). Xero stores both in the same Invoices
+  // table; nothing before this call distinguished them.
   list_invoices: {
     schema: z
       .object({
         entity: Entity,
+        type: z.enum(['ACCREC', 'ACCPAY']).optional(),
         statuses: z.array(z.enum(['DRAFT', 'SUBMITTED', 'AUTHORISED', 'PAID', 'VOIDED', 'DELETED'])).optional(),
         search: z.string().min(2).max(200).optional(),
         page: z.number().int().positive().optional(),
       })
       .strict(),
     annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
-    handler: async ({ entity, statuses, search, page }) => {
+    handler: async ({ entity, type, statuses, search, page }) => {
       const { client, tenantId } = await xero(entity, 'read');
+      const where = type === 'ACCREC' ? 'Type=="ACCREC"' : type === 'ACCPAY' ? 'Type=="ACCPAY"' : undefined;
       const r = await client.accountingApi.getInvoices(
-        tenantId, undefined, undefined, undefined, undefined, undefined, undefined,
+        tenantId, undefined, where, undefined, undefined, undefined, undefined,
         statuses, page, undefined, undefined, undefined, true, undefined, search,
       );
       return {
         _limits: limits(r.response),
         invoices: (r.body.invoices ?? []).map((i) => ({
           invoiceID: i.invoiceID, invoiceNumber: i.invoiceNumber, reference: i.reference,
-          contact: i.contact?.name, status: i.status,
+          type: i.type, contact: i.contact?.name, status: i.status,
           total: i.total, amountDue: i.amountDue, date: i.date, dueDate: i.dueDate,
         })),
       };
