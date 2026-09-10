@@ -17,7 +17,7 @@ export type Entity = (typeof ENTITIES)[number];
 // it actually meant. validatePolicy() below enforces the naming contract at
 // boot — a role named "X-invoice-creator" whose principal isn't scoped to
 // exactly [X] fails the start, not a 3am surprise.
-export type Role = 'pipeline' | 'finance' | 'query' | 'ff-events-invoice-creator' | 'invoice-reader' | 'viewer';
+export type Role = 'pipeline' | 'finance' | 'query' | 'ff-events-invoice-creator' | 'invoice-reader' | 'viewer' | 'admin-forecast';
 
 /**
  * Principals are Cloud Run service-account emails, or a Slack user id that the
@@ -81,4 +81,11 @@ export const GRANTS: Record<Role, readonly string[]> = {
   // away from everyone holding it, so widen per-person with a new role
   // instead of stretching this one.
   viewer: ['list_tax_rates', 'list_accounts'],
+  // Cashflow-visibility shape, by explicit request: awaiting invoices
+  // (list_invoices type: ACCREC), awaiting bills (type: ACCPAY), and the
+  // balance sheet. Deliberately excludes list_all_accounts/resolve_contact/
+  // anything write-capable — this is "see the shape of what's owed and
+  // owing," nothing else. Widen with a new role if a forecast reader turns
+  // out to need more, same rule as viewer above.
+  'admin-forecast': ['list_invoices', 'get_balance_sheet'],
 };
