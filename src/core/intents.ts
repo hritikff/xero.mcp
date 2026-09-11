@@ -195,7 +195,43 @@ export const INTENTS: Record<string, Intent> = {
     },
   },
 
-  // ---- the only write ----------------------------------------------------
+  // ---- writes --------------------------------------------------------------
+  // A deliberate, explicit, RBAC-gated capability - not a silent side effect
+  // of create_draft_invoice. That distinction is the whole point: this
+  // session's own rule throughout has been "never auto-create a contact as
+  // a side effect of something else" (process-invoice-pdf.js's contact-
+  // creation guard, ingest-contract.js's needsHuman entry for exactly this).
+  // Adding it here as its own named, audited, approval-gated tool honours
+  // that rule rather than breaking it - a person or script must call this
+  // ON PURPOSE, it shows up in Claude's own approval gate same as any other
+  // write, and it is idempotent by construction: search for an exact
+  // existing name first, never create a second contact for the same name.
+  create_contact: {
+    schema: z
+      .object({
+        entity: Entity,
+        name: z.string().min(2).max(255),
+        email: z.string().email().max(255).optional(),
+      })
+      .strict(),
+    annotations: { readOnly: false, destructive: false, idempotent: true, openWorld: true },
+    handler: async ({ entity, name, email }) => {
+      const { client, tenantId } = await xero(entity, 'write');
+      // searchTerm, not a where clause - same safety pattern as resolve_contact.
+      const existing = await client.accountingApi.getContacts(
+        tenantId, undefined, undefined, undefined, undefined, undefined, undefined, true, name,
+      );
+      const exact = (existing.body.contacts ?? []).find((c) => c.name === name);
+      if (exact) {
+        return { contactID: exact.contactID, name: exact.name, created: false, note: 'already existed, not duplicated' };
+      }
+      const r = await client.accountingApi.createContacts(tenantId, { contacts: [{ name, emailAddress: email }] });
+      const created = r.body.contacts?.[0];
+      if (!created?.contactID) throw new Error(`Xero did not return a contact ID: ${JSON.stringify(created)}`);
+      return { _limits: limits(r.response), contactID: created.contactID, name: created.name, created: true };
+    },
+  },
+
   create_draft_invoice: {
     schema: z
       .object({

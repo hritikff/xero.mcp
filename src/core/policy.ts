@@ -63,7 +63,7 @@ export const GRANTS: Record<Role, readonly string[]> = {
   // matter again.
   'ff-events-invoice-creator': [
     'list_tax_rates', 'list_accounts', 'list_all_accounts', 'list_invoices', 'get_balance_sheet', 'resolve_contact',
-    'create_draft_invoice', 'attach_invoice_document',
+    'create_contact', 'create_draft_invoice', 'attach_invoice_document',
   ],
   // "Read everything financial, write nothing." Same tool surface as
   // finance/query but its own role rather than reusing them — those two
