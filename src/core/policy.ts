@@ -82,10 +82,10 @@ export const GRANTS: Record<Role, readonly string[]> = {
   // instead of stretching this one.
   viewer: ['list_tax_rates', 'list_accounts'],
   // Cashflow-visibility shape, by explicit request: awaiting invoices
-  // (list_invoices type: ACCREC), awaiting bills (type: ACCPAY), and the
-  // balance sheet. Deliberately excludes list_all_accounts/resolve_contact/
-  // anything write-capable — this is "see the shape of what's owed and
-  // owing," nothing else. Widen with a new role if a forecast reader turns
-  // out to need more, same rule as viewer above.
-  'admin-forecast': ['list_invoices', 'get_balance_sheet'],
+  // (list_invoices type: ACCREC), awaiting bills (type: ACCPAY), balance
+  // sheet, and P&L. Deliberately excludes list_all_accounts/resolve_contact/
+  // anything write-capable — this is "see the shape of what's owed, owing,
+  // and earned," nothing else. Widen with a new role if a forecast reader
+  // turns out to need more, same rule as viewer above.
+  'admin-forecast': ['list_invoices', 'get_balance_sheet', 'get_profit_and_loss'],
 };

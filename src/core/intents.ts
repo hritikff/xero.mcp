@@ -180,6 +180,29 @@ export const INTENTS: Record<string, Intent> = {
     },
   },
 
+  // Same safety shape as get_balance_sheet - every param SDK-typed, no where
+  // clause anywhere. standardLayout forced true for the same reason: the
+  // comparable, period-over-period shape rather than a custom chart layout.
+  get_profit_and_loss: {
+    schema: z
+      .object({
+        entity: Entity,
+        fromDate: z.string().date().optional(),
+        toDate: z.string().date().optional(),
+        periods: z.number().int().positive().max(12).optional(),
+        timeframe: z.enum(['MONTH', 'QUARTER', 'YEAR']).optional(),
+      })
+      .strict(),
+    annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
+    handler: async ({ entity, fromDate, toDate, periods, timeframe }) => {
+      const { client, tenantId } = await xero(entity, 'read');
+      const r = await client.accountingApi.getReportProfitAndLoss(
+        tenantId, fromDate, toDate, periods, timeframe, undefined, undefined, undefined, undefined, true,
+      );
+      return { _limits: limits(r.response), report: r.body.reports?.[0] ?? null };
+    },
+  },
+
   resolve_contact: {
     schema: z.object({ entity: Entity, name: z.string().min(2).max(200) }).strict(),
     annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
