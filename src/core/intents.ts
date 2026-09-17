@@ -5,6 +5,7 @@ import { ENTITIES } from './policy.ts';
 import { Invoice, LineAmountTypes } from 'xero-node';
 import { xero, limits, xeroError } from '../adapters/xero.ts';
 import { toDecimal, fromXero } from './money.ts';
+import { decideVat, assertTaxTypeExists, type VatDecision } from './vat.ts';
 import * as claims from './claims.ts';
 import * as invoices from './invoices.ts';
 import * as tracker from '../adapters/tracker/index.ts';
@@ -180,6 +181,54 @@ export const INTENTS: Record<string, Intent> = {
     },
   },
 
+  // Reconciliation status behind a balance-sheet figure. The cash-flow
+  // forecast reads "cash at bank and in hand" from get_balance_sheet, but
+  // that number is only trustworthy once the bank feed is reconciled - an
+  // unreconciled transaction is real money the balance has not caught up
+  // with yet. This is what lets a reader see "2 unreconciled" against an
+  // account instead of silently trusting a stale figure.
+  //
+  // The `where` clause is a constant built here, exactly like list_invoices'
+  // type filter. `bankAccountId` is the one caller-supplied value reaching
+  // it, and zod has already constrained it to a UUID - a UUID cannot carry
+  // a quote or an operator, so the filter parser never sees caller text it
+  // could act on.
+  list_unreconciled: {
+    schema: z
+      .object({
+        entity: Entity,
+        bankAccountId: z.string().uuid().optional(),
+        page: z.number().int().positive().optional(),
+      })
+      .strict(),
+    annotations: { readOnly: true, destructive: false, idempotent: true, openWorld: false },
+    handler: async ({ entity, bankAccountId, page }) => {
+      const { client, tenantId } = await xero(entity, 'read');
+      const where = bankAccountId
+        ? `IsReconciled==false AND BankAccount.AccountID==GUID("${bankAccountId}")`
+        : 'IsReconciled==false';
+      const r = await client.accountingApi.getBankTransactions(
+        tenantId, undefined, where, 'Date DESC', page,
+      );
+      const rows = r.body.bankTransactions ?? [];
+      return {
+        _limits: limits(r.response),
+        unreconciled: rows.length,
+        oldest: rows.length ? rows[rows.length - 1].date : null,
+        transactions: rows.map((t) => ({
+          bankTransactionID: t.bankTransactionID,
+          date: t.date,
+          type: t.type,
+          reference: t.reference,
+          contact: t.contact?.name,
+          total: fromXero(t.total),
+          bankAccount: t.bankAccount?.name,
+          bankAccountID: t.bankAccount?.accountID,
+        })),
+      };
+    },
+  },
+
   // Same safety shape as get_balance_sheet - every param SDK-typed, no where
   // clause anywhere. standardLayout forced true for the same reason: the
   // comparable, period-over-period shape rather than a custom chart layout.
@@ -276,7 +325,12 @@ export const INTENTS: Record<string, Intent> = {
                 description: z.string().min(1).max(4000),
                 amount_minor: Money,
                 account_code: z.string().min(1).max(10),
-                tax_type: z.string().min(1).max(50),
+                // Optional since the VAT-by-location rule landed: the tax code
+                // is DERIVED from the customer's billing country, not stated
+                // by the caller. Still accepted so an existing caller keeps
+                // working, but only so it can be checked against the derived
+                // value and refused on disagreement - never so it can win.
+                tax_type: z.string().min(1).max(50).optional(),
               })
               .strict(),
           )
@@ -289,6 +343,39 @@ export const INTENTS: Record<string, Intent> = {
       .strict(),
     annotations: { readOnly: false, destructive: false, idempotent: true, openWorld: true },
     handler: async (a, ctx) => {
+      // VAT is decided BEFORE the claim ledger is touched, on purpose. A
+      // customer whose location cannot be established is a bad request, not a
+      // half-finished write, so it must not leave a PENDING claim behind for
+      // the sweeper to chase. Nothing here writes anything.
+      const rconn = await xero(a.entity, 'read');
+      const contact = (await rconn.client.accountingApi.getContact(rconn.tenantId, a.contact_id))
+        .body.contacts?.[0];
+      if (!contact) {
+        throw Object.assign(new Error(`contact ${a.contact_id} not found in ${a.entity}`), { statusCode: 404 });
+      }
+
+      const vat: VatDecision = decideVat(a.entity, contact);
+      await assertTaxTypeExists(a.entity, vat.taxType, rconn.client, rconn.tenantId);
+
+      // A caller may still state a tax type, but only to have it CHECKED.
+      // Disagreement is refused rather than settled by precedence: one of the
+      // two is wrong about a real customer's VAT, and quietly picking a winner
+      // is how a wrong figure reaches a VAT return. Correcting it is a
+      // deliberate act by a person in Xero, which leaves a trail this call
+      // cannot.
+      const disagree = [...new Set(a.line_items.map((l: any) => l.tax_type).filter(Boolean))]
+        .filter((t) => t !== vat.taxType);
+      if (disagree.length) {
+        throw Object.assign(
+          new Error(
+            `tax type mismatch: caller asked for ${disagree.join(', ')}, but "${contact.name}" is in ` +
+            `${vat.country} (${vat.countrySource}), which under the location rule means ${vat.taxType} ` +
+            `(${vat.rule}). Nothing was written.`,
+          ),
+          { statusCode: 422, code: 'VAT_MISMATCH' },
+        );
+      }
+
       const key = claims.claimKey('teller', a.source_record_id, a.allocation_index);
       const c = await claims.claim(key, a.entity, a.reference, claims.requestHash(a));
 
@@ -301,9 +388,8 @@ export const INTENTS: Record<string, Intent> = {
         // checks its own state, roll-forward checks for an existing row —
         // so a retry actually finishes what crashed, instead of silently
         // returning as if everything downstream had already completed.
-        const rconn = await xero(a.entity, 'read');
         const refetched = (await rconn.client.accountingApi.getInvoice(rconn.tenantId, c.xeroInvoiceId)).body.invoices[0];
-        return finishInvoice(a.entity, a.source_record_id, key, refetched, a.attach_online ?? false, false);
+        return { ...await finishInvoice(a.entity, a.source_record_id, key, refetched, a.attach_online ?? false, false), vat };
       }
       if (c.kind === 'conflict') {
         await review.escalate({
@@ -326,7 +412,7 @@ export const INTENTS: Record<string, Intent> = {
         const existing = found.body.invoices?.[0];
         if (existing?.invoiceID) {
           await claims.confirm(key, existing.invoiceID);
-          return { invoiceID: existing.invoiceID, created: false, recovered: true, claimKey: key };
+          return { invoiceID: existing.invoiceID, created: false, recovered: true, claimKey: key, vat };
         }
       }
 
@@ -345,7 +431,7 @@ export const INTENTS: Record<string, Intent> = {
             unitAmount: Number(toDecimal(l.amount_minor)),
             lineAmount: Number(toDecimal(l.amount_minor)),  // explicit: Xero recomputes otherwise
             accountCode: l.account_code,
-            taxType: l.tax_type,
+            taxType: vat.taxType,   // derived from the customer, never from the caller
           })),
         }],
       };
@@ -391,7 +477,7 @@ export const INTENTS: Record<string, Intent> = {
       }
 
       await claims.confirm(key, inv.invoiceID);
-      return finishInvoice(a.entity, a.source_record_id, key, inv, a.attach_online ?? false, true, res.response);
+      return { ...await finishInvoice(a.entity, a.source_record_id, key, inv, a.attach_online ?? false, true, res.response), vat };
     },
   },
 

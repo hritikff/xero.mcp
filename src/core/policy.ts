@@ -34,6 +34,9 @@ export const PRINCIPALS: Record<string, { role: Role; entities: readonly Entity[
   // principal to touch tech-nation without the name already having told
   // them not to.
   'U0INVOICE-CREATOR': { role: 'ff-events-invoice-creator', entities: ['ff-events'] },
+  // Same pattern as U0INVOICE-CREATOR: a generic test principal named after
+  // its role rather than a real person, scoped to exactly ff-events.
+  'U0ADMIN-FORECAST': { role: 'admin-forecast', entities: ['ff-events'] },
 };
 
 /**
@@ -87,5 +90,12 @@ export const GRANTS: Record<Role, readonly string[]> = {
   // anything write-capable — this is "see the shape of what's owed, owing,
   // and earned," nothing else. Widen with a new role if a forecast reader
   // turns out to need more, same rule as viewer above.
-  'admin-forecast': ['list_invoices', 'get_balance_sheet', 'get_profit_and_loss'],
+  //
+  // list_unreconciled added 2026-09-14: the forecast reads cash from
+  // get_balance_sheet, and that figure is only trustworthy once the feed is
+  // reconciled. Granting it here is the narrowest way to let the dashboard
+  // say "this balance is N transactions behind" — it reads bank transaction
+  // metadata, never moves or reconciles anything, and reconciling stays a
+  // human action inside Xero itself.
+  'admin-forecast': ['list_invoices', 'get_balance_sheet', 'get_profit_and_loss', 'list_unreconciled'],
 };
