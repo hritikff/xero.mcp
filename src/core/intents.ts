@@ -2,10 +2,10 @@
 // never an RBAC list. That is the whole reason there is exactly one HTTP route.
 import { z } from 'zod';
 import { ENTITIES } from './policy.ts';
-import { Invoice, LineAmountTypes } from 'xero-node';
+import { Address, Invoice, LineAmountTypes } from 'xero-node';
 import { xero, limits, xeroError } from '../adapters/xero.ts';
 import { toDecimal, fromXero } from './money.ts';
-import { decideVat, assertTaxTypeExists, type VatDecision } from './vat.ts';
+import { decideVat, assertTaxTypeExists, billingCountry, type VatDecision } from './vat.ts';
 import * as claims from './claims.ts';
 import * as invoices from './invoices.ts';
 import * as tracker from '../adapters/tracker/index.ts';
@@ -284,10 +284,27 @@ export const INTENTS: Record<string, Intent> = {
         entity: Entity,
         name: z.string().min(2).max(255),
         email: z.string().email().max(255).optional(),
+        // The billing address, written as POBOX because that is the one Xero
+        // prints on an invoice. Optional only so an existing caller keeps
+        // working - a contact created WITHOUT a country cannot be invoiced at
+        // all now that VAT follows the customer's location, so the response
+        // says so rather than letting it fail later at create_draft_invoice.
+        // Cam's instruction was billing address only, never delivery.
+        address: z
+          .object({
+            line1: z.string().max(500).optional(),
+            line2: z.string().max(500).optional(),
+            city: z.string().max(255).optional(),
+            region: z.string().max(255).optional(),
+            postalCode: z.string().max(50).optional(),
+            country: z.string().min(2).max(50),
+          })
+          .strict()
+          .optional(),
       })
       .strict(),
     annotations: { readOnly: false, destructive: false, idempotent: true, openWorld: true },
-    handler: async ({ entity, name, email }) => {
+    handler: async ({ entity, name, email, address }) => {
       const { client, tenantId } = await xero(entity, 'write');
       // searchTerm, not a where clause - same safety pattern as resolve_contact.
       const existing = await client.accountingApi.getContacts(
@@ -295,12 +312,43 @@ export const INTENTS: Record<string, Intent> = {
       );
       const exact = (existing.body.contacts ?? []).find((c) => c.name === name);
       if (exact) {
-        return { contactID: exact.contactID, name: exact.name, created: false, note: 'already existed, not duplicated' };
+        // Deliberately does NOT write the supplied address onto an existing
+        // contact. Silently changing a customer's billing address is how a
+        // VAT rate changes without anyone deciding to change it; that edit is
+        // a person's job in Xero. Reported instead, so the caller learns now
+        // rather than when the invoice halts.
+        const read = billingCountry(exact);
+        return {
+          contactID: exact.contactID, name: exact.name, created: false,
+          note: 'already existed, not duplicated',
+          billingCountry: read.ok ? read.country : null,
+          ...(read.ok ? {} : { warning: `this contact has no usable billing country (${read.reason}), so invoicing it will halt until one is set in Xero` }),
+        };
       }
-      const r = await client.accountingApi.createContacts(tenantId, { contacts: [{ name, emailAddress: email }] });
+
+      const r = await client.accountingApi.createContacts(tenantId, {
+        contacts: [{
+          name,
+          emailAddress: email,
+          ...(address
+            ? {
+                addresses: [{
+                  addressType: Address.AddressTypeEnum.POBOX,
+                  addressLine1: address.line1, addressLine2: address.line2,
+                  city: address.city, region: address.region,
+                  postalCode: address.postalCode, country: address.country,
+                }],
+              }
+            : {}),
+        }],
+      });
       const created = r.body.contacts?.[0];
       if (!created?.contactID) throw new Error(`Xero did not return a contact ID: ${JSON.stringify(created)}`);
-      return { _limits: limits(r.response), contactID: created.contactID, name: created.name, created: true };
+      return {
+        _limits: limits(r.response), contactID: created.contactID, name: created.name, created: true,
+        billingCountry: address?.country ?? null,
+        ...(address ? {} : { warning: 'created without a billing country, so invoicing it will halt until one is set. Pass `address` with the country from the contract.' }),
+      };
     },
   },
 
