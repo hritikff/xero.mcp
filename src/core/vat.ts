@@ -67,21 +67,26 @@ export function isUk(raw: string | undefined | null): boolean {
 }
 
 export type CountryRead =
-  | { ok: true; country: string; source: 'POBOX' | 'STREET' }
+  | { ok: true; country: string; source: 'POBOX' }
   | { ok: false; reason: string };
 
 /**
- * Xero contacts carry two addresses. POBOX is the one Xero prints on an
- * invoice as the billing address, so it wins; STREET is the fallback for a
- * contact where only one address was ever filled in. Cam's instruction was
- * billing address only, never delivery.
+ * BILLING ADDRESS ONLY. Cam's instruction, and it is not a preference: where
+ * an invoice is SENT is what decides its VAT, and where goods would be
+ * delivered is a different question with a different answer.
  *
- * Two addresses naming countries on OPPOSITE sides of the UK rule is not
- * something to resolve by precedence: one of them is wrong, and which one is
- * wrong is exactly what decides whether this customer pays 20% or nothing.
- * That refuses. Two addresses that disagree but both sit on the same side of
- * the rule (London and Manchester) do not refuse, because the answer is the
- * same either way.
+ * Xero's two address types are named after what they once meant rather than
+ * what they are. POBOX is the billing address, the one Xero prints on an
+ * invoice. STREET is the delivery address. Only POBOX is read here.
+ *
+ * There is deliberately NO fallback to STREET. An earlier version had one, on
+ * the reasoning that a contact with only one address filled in still has a
+ * knowable country - but that reasoning quietly decides VAT from a delivery
+ * address, which is the one thing the rule forbids. Measured against Demo
+ * Company at the time, it was not hypothetical: every contact that resolved
+ * did so through the STREET fallback. A missing billing country halts. The
+ * delivery address is named in the refusal so it is easy to copy across, and
+ * that copying is a person's decision, not this function's.
  */
 export function billingCountry(contact: any): CountryRead {
   const addrs: any[] = contact?.addresses ?? [];
@@ -89,25 +94,24 @@ export function billingCountry(contact: any): CountryRead {
     const a = addrs.find((x) => x.addressType === t && normaliseCountry(x.country));
     return a ? String(a.country).trim() : null;
   };
-  const pobox = pick('POBOX');
-  const street = pick('STREET');
 
-  if (pobox && street && isUk(pobox) !== isUk(street)) {
-    return {
-      ok: false,
-      reason: `billing address says "${pobox}" and street address says "${street}", which fall on opposite sides of the UK VAT rule`,
-    };
-  }
+  const billing = pick('POBOX');
+  if (billing) return { ok: true, country: billing, source: 'POBOX' };
 
-  const country = pobox ?? street;
-  if (!country) return { ok: false, reason: 'no country set on either address' };
-  return { ok: true, country, source: pobox ? 'POBOX' : 'STREET' };
+  const delivery = pick('STREET');
+  return {
+    ok: false,
+    reason: delivery
+      ? `no country on the billing address. The delivery address says "${delivery}", but VAT is decided by where the invoice is billed, so that is not usable here`
+      : 'no country on the billing address',
+  };
 }
 
 export type VatDecision = {
   taxType: string;
   country: string;
-  countrySource: 'POBOX' | 'STREET';
+  /** Always the billing address. Recorded so the audit row states it outright. */
+  countrySource: 'POBOX';
   rule: 'uk-standard-rated' | 'non-uk-no-vat';
 };
 
@@ -127,7 +131,7 @@ export function decideVat(entity: Entity, contact: any): VatDecision {
     throw Object.assign(
       new Error(
         `cannot determine VAT for contact "${contact?.name ?? contact?.contactID}": ${read.reason}. ` +
-        `VAT follows the customer's location, so set the billing country on this contact in Xero and retry. Nothing was written.`,
+        `VAT follows where the customer is billed, so set the country on this contact's BILLING address in Xero and retry. Nothing was written.`,
       ),
       { statusCode: 422, code: 'VAT_COUNTRY_UNKNOWN' },
     );
